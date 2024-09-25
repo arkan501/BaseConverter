@@ -40,6 +40,8 @@ func binaryToDecimal(binary string) int {
 	answer := 0
 	exponent := float64(len(binary) - 1)
 
+    // cycling through the string to parse out each number and then multiply
+    // it by the appropriate power of 2
 	for i := 0; i < len(binary); i++ {
 		answer += fromBinMap[string(binary[i])] * int(math.Pow(2, exponent))
 		exponent--
@@ -53,6 +55,7 @@ func decimalToHex(decimal int) string {
 
 	for decimal > 0 {
 		// before dividing we want the remainder to be converted to hexadecimal
+        // and added to the answer string
 		answer += toHexMap[decimal%16]
 		decimal /= 16
 	}
@@ -65,7 +68,8 @@ func decimalToHex(decimal int) string {
 func decimalToOctal(decimal int) string {
 	answer := ""
 	for decimal > 0 {
-		// before dividing we want the remainder to be converted to octal
+		// before dividing we want the remainder to be converted to octal and
+        // added to the answer string
 		answer += toOctMap[decimal%8]
 		decimal /= 8
 	}
@@ -78,7 +82,8 @@ func decimalToOctal(decimal int) string {
 func decimalToBinary(decimal int) string {
 	answer := ""
 	for decimal > 0 {
-		// before dividing we want the remainder to be converted to binary
+		// before dividing we want the remainder to be converted to binary and
+        // added to the answer string
 		answer += toBinMap[decimal%2]
 		decimal /= 2
 	}
@@ -88,7 +93,8 @@ func decimalToBinary(decimal int) string {
 	return answer
 }
 
-// This last section is for handling all other cases
+// This function pulls all the seperate conversion functions together, to check
+// what gets converted to what
 func BaseConversion(fomBase, toBase int, number string) string {
 	var firstConversion int
 	var finalConversion string
@@ -120,6 +126,7 @@ func BaseConversion(fomBase, toBase int, number string) string {
 	return finalConversion
 }
 
+// This function checks if the number is valid for the chosen base
 func isValidBase(fromBase int, number string) bool {
 	validBase := true
 	for i := 0; i < len(number); i++ {

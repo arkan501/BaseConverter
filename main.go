@@ -17,6 +17,8 @@ func main() {
 		"Binary, Octal, Hexadecimal, and Decimal.")
 	fmt.Println()
 
+    // This is the main loop of the program. It will keep asking the user if they
+    // want to convert a number until they choose to quit
 	for {
 		fmt.Println("Would you like to convert a number? [y/n]")
 		fmt.Scan(&choice)
@@ -96,6 +98,8 @@ func doTheThing() {
         validBase = isValidBase(fromBase, number)
         if !validBase {
             fmt.Println("Not a valid number for the chosen base")
+            fmt.Println("Please try again")
+            // add a bit of delay so user can process the message.
             time.Sleep(2 * time.Second)
         }
 	}
