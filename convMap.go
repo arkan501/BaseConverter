@@ -4,7 +4,7 @@ package main
 // since conversion is required in both directions, there are from- and to- maps
 // for hexadecimal, octal, and binary. Decimal does not need one, since it is
 // The default base
-    
+
 var fromHexMap = map[string]int{
 	"0": 0,
 	"1": 1,

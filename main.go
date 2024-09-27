@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
-    "time"
+	"time"
 )
 
 func main() {
@@ -17,15 +17,15 @@ func main() {
 		"Binary, Octal, Hexadecimal, and Decimal.")
 	fmt.Println()
 
-    // This is the main loop of the program. It will keep asking the user if they
-    // want to convert a number until they choose to quit
+	// This is the main loop of the program. It will keep asking the user if they
+	// want to convert a number until they choose to quit
 	for {
 		fmt.Println("Would you like to convert a number? [y/n]")
 		fmt.Scan(&choice)
-		strings.ToLower(choice)
+		choice = strings.ToLower(choice)
 		switch choice {
 		case "y":
-			doTheThing()
+			ConvertNumberBase()
 		case "n":
 			fmt.Println("Goodbye")
 			return
@@ -72,7 +72,7 @@ func showConversion(fromBase, toBase int) {
 	fmt.Printf("%s => %s\n", fromWord, toWord)
 }
 
-func doTheThing() {
+func ConvertNumberBase() {
 	var fromBase, toBase int
 	var number string
 	validBase := false
@@ -95,15 +95,15 @@ func doTheThing() {
 		showConversion(fromBase, toBase)
 		fmt.Println("Enter a number: ")
 		fmt.Scan(&number)
-        validBase = isValidBase(fromBase, number)
-        if !validBase {
-            fmt.Println("Not a valid number for the chosen base")
-            fmt.Println("Please try again")
-            // add a bit of delay so user can process the message.
-            time.Sleep(2 * time.Second)
-        }
+		validBase = isValidBase(fromBase, number)
+		if !validBase {
+			fmt.Println("Not a valid number for the chosen base")
+			fmt.Println("Please try again")
+			// add a bit of delay so user can process the message.
+			time.Sleep(2 * time.Second)
+		}
 	}
 
-    fmt.Println("The converted number is: ")
-    fmt.Println(BaseConversion(fromBase, toBase, number))
+	fmt.Println("The converted number is: ")
+	fmt.Println(BaseConversion(fromBase, toBase, number))
 }

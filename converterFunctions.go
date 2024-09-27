@@ -40,8 +40,8 @@ func binaryToDecimal(binary string) int {
 	answer := 0
 	exponent := float64(len(binary) - 1)
 
-    // cycling through the string to parse out each number and then multiply
-    // it by the appropriate power of 2
+	// cycling through the string to parse out each number and then multiply
+	// it by the appropriate power of 2
 	for i := 0; i < len(binary); i++ {
 		answer += fromBinMap[string(binary[i])] * int(math.Pow(2, exponent))
 		exponent--
@@ -55,7 +55,7 @@ func decimalToHex(decimal int) string {
 
 	for decimal > 0 {
 		// before dividing we want the remainder to be converted to hexadecimal
-        // and added to the answer string
+		// and added to the answer string
 		answer += toHexMap[decimal%16]
 		decimal /= 16
 	}
@@ -69,7 +69,7 @@ func decimalToOctal(decimal int) string {
 	answer := ""
 	for decimal > 0 {
 		// before dividing we want the remainder to be converted to octal and
-        // added to the answer string
+		// added to the answer string
 		answer += toOctMap[decimal%8]
 		decimal /= 8
 	}
@@ -83,7 +83,7 @@ func decimalToBinary(decimal int) string {
 	answer := ""
 	for decimal > 0 {
 		// before dividing we want the remainder to be converted to binary and
-        // added to the answer string
+		// added to the answer string
 		answer += toBinMap[decimal%2]
 		decimal /= 2
 	}
@@ -105,6 +105,7 @@ func BaseConversion(fomBase, toBase int, number string) string {
 	case 2:
 		firstConversion = octalToDecimal(number)
 	case 3:
+		number = strings.ToUpper(number)
 		firstConversion = hexToDecimal(number)
 	case 4:
 		// This is for when the user is converting from decimal
