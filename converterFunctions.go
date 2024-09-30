@@ -6,158 +6,123 @@ import (
 	"strings"
 )
 
-// This is where all the conversion functions go
-// This first section is for converting from a base to decimal
-func hexToDecimal(hex string) int {
-	hex = strings.ToUpper(hex)
-	answer := 0
-	exponent := float64(len(hex) - 1)
-
-	// Since a string is essentially an array of runes, we can cycle through
-	// each position in the string and parse out the number at that position
-	// we then multiply that number by the appropriate power of 16
-	for i := 0; i < len(hex); i++ {
-		answer += fromHexMap[string(hex[i])] * int(math.Pow(16, exponent))
-		exponent--
-	}
-	return answer
-}
-
-func octalToDecimal(octal string) int {
-	answer := 0
-	exponent := float64(len(octal) - 1)
-
-	// cycling through the string to parse out each number and then multiply
-	// it by the appropriate power of 8
-	for i := 0; i < len(octal); i++ {
-		answer += fromOctMap[string(octal[i])] * int(math.Pow(8, exponent))
-		exponent--
-	}
-	return answer
-}
-
-func binaryToDecimal(binary string) int {
-	answer := 0
-	exponent := float64(len(binary) - 1)
-
-	// cycling through the string to parse out each number and then multiply
-	// it by the appropriate power of 2
-	for i := 0; i < len(binary); i++ {
-		answer += fromBinMap[string(binary[i])] * int(math.Pow(2, exponent))
-		exponent--
-	}
-	return answer
-}
-
-// This section is for converting from decimal to another base
-func decimalToHex(decimal int) string {
-	answer := ""
-
-	for decimal > 0 {
-		// before dividing we want the remainder to be converted to hexadecimal
-		// and added to the answer string
-		answer += toHexMap[decimal%16]
-		decimal /= 16
-	}
-	// before returning the answer we must reverse the string, as it is currently
-	// in reverse order: LSD -> MSD, we want MSD -> LSD
-	answer = reverseString(answer)
-	return answer
-}
-
-func decimalToOctal(decimal int) string {
-	answer := ""
-	for decimal > 0 {
-		// before dividing we want the remainder to be converted to octal and
-		// added to the answer string
-		answer += toOctMap[decimal%8]
-		decimal /= 8
-	}
-	// before returning the answer we must reverse the string, as it is currently
-	// in reverse order: LSD -> MSD, we want MSD -> LSD
-	answer = reverseString(answer)
-	return answer
-}
-
-func decimalToBinary(decimal int) string {
-	answer := ""
-	for decimal > 0 {
-		// before dividing we want the remainder to be converted to binary and
-		// added to the answer string
-		answer += toBinMap[decimal%2]
-		decimal /= 2
-	}
-	// before returning the answer we must reverse the string, as it is currently
-	// in reverse order: LSD -> MSD, we want MSD -> LSD
-	answer = reverseString(answer)
-	return answer
-}
-
-// This function pulls all the seperate conversion functions together, to check
-// what gets converted to what
-func BaseConversion(fomBase, toBase int, number string) string {
+func ConvertBase(fromBase, toBase int, number string) string {
 	var firstConversion int
 	var finalConversion string
 
-	switch fomBase {
-	case 1:
-		firstConversion = binaryToDecimal(number)
-	case 2:
-		firstConversion = octalToDecimal(number)
-	case 3:
-		number = strings.ToUpper(number)
-		firstConversion = hexToDecimal(number)
+	switch fromBase {
 	case 4:
 		// This is for when the user is converting from decimal
 		firstConversion, _ = strconv.Atoi(number)
+	default:
+		firstConversion = convertToDecimal(fromBase, number)
 	}
 
 	switch toBase {
-	case 1:
-		finalConversion = decimalToBinary(firstConversion)
-	case 2:
-		finalConversion = decimalToOctal(firstConversion)
-	case 3:
-		finalConversion = decimalToHex(firstConversion)
 	case 4:
 		// This is for when the user is converting to decimal
 		finalConversion = strconv.Itoa(firstConversion)
+	default:
+		finalConversion = convertFromDecimal(toBase, firstConversion)
 	}
 
 	return finalConversion
 }
 
-// This function checks if the number is valid for the chosen base
+func convertToDecimal(fromBase int, number string) int {
+	var base int
+	var result int
+	exponent := float64(len(number) - 1)
+
+	switch fromBase {
+	case 1:
+		base = 2
+	case 2:
+		base = 8
+	case 3:
+		base = 16
+	}
+
+	for i := 0; i < len(number); i++ {
+		if fromBase == 3 {
+			number = strings.ToUpper(number)
+			result += fromHexMap[string(number[i])] * int(math.Pow(float64(base), exponent))
+			exponent--
+			continue
+		} else {
+			current, _ := strconv.Atoi(string(number[i]))
+			result += current * int(math.Pow(float64(base), exponent))
+			exponent--
+		}
+	}
+	return result
+}
+
+func convertFromDecimal(toBase int, decimal int) string {
+	var base int
+	var result string
+
+	switch toBase {
+	case 1:
+		base = 2
+	case 2:
+		base = 8
+	case 3:
+		base = 16
+	}
+
+	for decimal > 0 {
+		if toBase == 3 {
+			result += toHexMap[decimal%base]
+			decimal /= base
+		} else {
+			result += strconv.Itoa(decimal % base)
+			decimal /= base
+		}
+	}
+
+	// before returning the answer we must reverse the string, as it is currently
+	// in reverse order: LSD -> MSD, we want MSD -> LSD
+	return reverseString(result)
+}
+
 func isValidBase(fromBase int, number string) bool {
-	validBase := true
+
+	if number == "" {
+		return false
+	}
+
 	for i := 0; i < len(number); i++ {
 		switch fromBase {
 		case 1:
-			if _, exists := fromBinMap[string(number[i])]; !exists {
-				validBase = false
+			if _, exists := BinMap[string(number[i])]; !exists {
+				return false
 			}
 		case 2:
-			if _, exists := fromOctMap[string(number[i])]; !exists {
-				validBase = false
+			if _, exists := OctMap[string(number[i])]; !exists {
+				return false
 			}
 		case 3:
+            number = strings.ToUpper(number)
 			if _, exists := fromHexMap[string(number[i])]; !exists {
-				validBase = false
+				return false
 			}
 		case 4:
 			if _, err := strconv.Atoi(string(number[i])); err != nil {
-				validBase = false
+				return false
 			}
 		}
 	}
 
-	return validBase
+	return true
 }
 
 func reverseString(number string) string {
-	runeArray := []rune(number)
-	for i, j := 0, len(runeArray)-1; i < j; i, j = i+1, j-1 {
-		runeArray[i], runeArray[j] = runeArray[j], runeArray[i]
+	byteArray := []byte(number)
+
+	for i, j := 0, len(number)-1; i < j; i, j = i+1, j-1 {
+		byteArray[i], byteArray[j] = byteArray[j], byteArray[i]
 	}
-	return string(runeArray)
+
+	return string(byteArray)
 }

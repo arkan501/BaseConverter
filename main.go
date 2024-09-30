@@ -80,15 +80,35 @@ func ConvertNumberBase() {
 	ClearScreen()
 	subMenu()
 	fmt.Println()
-	fmt.Println("Choose a base to convert from: ")
-	fmt.Scan(&fromBase)
+	for {
+		fmt.Println("Choose a base to convert from: ")
+		fmt.Scan(&fromBase)
+
+		if fromBase < 1 || fromBase > 4 {
+			fmt.Println("Not a valid base")
+			fmt.Println("Please try again")
+			time.Sleep(2 * time.Second)
+		} else {
+			break
+		}
+	}
 
 	ClearScreen()
 	showConversion(fromBase, toBase)
 	subMenu()
 	fmt.Println()
-	fmt.Println("Choose a base to convert to: ")
-	fmt.Scan(&toBase)
+	for {
+		fmt.Println("Choose a base to convert to: ")
+		fmt.Scan(&toBase)
+
+		if toBase < 1 || toBase > 4 {
+			fmt.Println("Not a valid base")
+			fmt.Println("Please try again")
+			time.Sleep(2 * time.Second)
+		} else {
+			break
+		}
+	}
 
 	for !validBase {
 		ClearScreen()
@@ -105,5 +125,5 @@ func ConvertNumberBase() {
 	}
 
 	fmt.Println("The converted number is: ")
-	fmt.Println(BaseConversion(fromBase, toBase, number))
+	fmt.Println(ConvertBase(fromBase, toBase, number))
 }

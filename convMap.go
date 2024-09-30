@@ -43,7 +43,7 @@ var toHexMap = map[int]string{
 	15: "F",
 }
 
-var fromOctMap = map[string]int{
+var OctMap = map[string]int{
 	"0": 0,
 	"1": 1,
 	"2": 2,
@@ -54,23 +54,7 @@ var fromOctMap = map[string]int{
 	"7": 7,
 }
 
-var toOctMap = map[int]string{
-	0: "0",
-	1: "1",
-	2: "2",
-	3: "3",
-	4: "4",
-	5: "5",
-	6: "6",
-	7: "7",
-}
-
-var fromBinMap = map[string]int{
+var BinMap = map[string]int{
 	"0": 0,
 	"1": 1,
-}
-
-var toBinMap = map[int]string{
-	0: "0",
-	1: "1",
 }
